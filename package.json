@@ -1,0 +1,100 @@
+{
+  "name": "@afrisinc/api-gateway",
+  "version": "1.0.0",
+  "description": "Production-ready Fastify API Gateway for Afrisinc microservices architecture",
+  "homepage": "https://github.com/afrisinc/api-gateway",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/afrisinc/api-gateway.git"
+  },
+  "bugs": {
+    "url": "https://github.com/afrisinc/api-gateway/issues"
+  },
+  "author": {
+    "name": "Afrisinc Engineering",
+    "email": "engineering@afrisinc.com"
+  },
+  "maintainers": [
+    {
+      "name": "Afrisinc Engineering",
+      "email": "engineering@afrisinc.com"
+    }
+  ],
+  "contributors": [
+    "Afrisinc Engineering <engineering@afrisinc.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "main": "dist/server.js",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "packageManager": "npm@9.0.0",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "dev:debug": "NODE_DEBUG=* tsx watch src/server.ts",
+    "build": "tsc && tsc-alias",
+    "start": "node dist/server.js",
+    "start:prod": "NODE_ENV=production node dist/server.js",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "lint": "eslint \"src/**/*.{js,ts}\" --max-warnings=0",
+    "lint:fix": "eslint \"src/**/*.{js,ts}\" --fix",
+    "format": "prettier --write \"src/**/*.{js,ts,json,md}\"",
+    "format:check": "prettier --check \"src/**/*.{js,ts,json,md}\"",
+    "type-check": "tsc --noEmit",
+    "check-all": "npm run type-check && npm run lint && npm run format:check",
+    "fix-all": "npm run lint:fix && npm run format",
+    "clean": "rimraf dist coverage node_modules/.cache",
+    "clean:all": "rimraf dist coverage node_modules pnpm-lock.yaml",
+    "prepare": "husky"
+  },
+  "keywords": [
+    "fastify",
+    "nodejs",
+    "typescript",
+    "api-gateway",
+    "microservices",
+    "gateway",
+    "routing",
+    "proxy"
+  ],
+  "dependencies": {
+    "@fastify/cors": "^8.4.2",
+    "@fastify/helmet": "^11.1.1",
+    "@fastify/jwt": "^7.2.4",
+    "@fastify/swagger": "^8.15.0",
+    "@fastify/swagger-ui": "^4.2.0",
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
+    "fastify": "^4.24.3",
+    "jsonwebtoken": "^9.0.3",
+    "pino": "^10.0.0",
+    "pino-pretty": "^13.1.2",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^20.9.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.1",
+    "@typescript-eslint/parser": "^8.46.1",
+    "@vitest/coverage-v8": "^1.0.0",
+    "@vitest/ui": "^1.0.0",
+    "eslint": "^9.37.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.4",
+    "prettier": "^3.6.2",
+    "rimraf": "^5.0.5",
+    "tsc-alias": "^1.8.8",
+    "tsx": "^4.6.0",
+    "typescript": "^5.2.2",
+    "typescript-eslint": "^8.46.1",
+    "vitest": "^1.0.0"
+  }
+}

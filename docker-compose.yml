@@ -1,0 +1,20 @@
+services:
+  api-gateway:
+    build: .
+    container_name: afrisinc_api_gateway
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      JWT_SECRET: ${JWT_SECRET}
+      AUTH_SERVICE_URL: http://auth-service:3001
+      CONTENT_SERVICE_URL: http://content-service:3002
+      MEDIA_SERVICE_URL: http://media-service:3003
+    ports:
+      - "3000:3000"
+    networks:
+      - afrisinc_network
+
+networks:
+  afrisinc_network:
+    driver: bridge
