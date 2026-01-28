@@ -11,7 +11,7 @@ export const env = {
   CONTENT_SERVICE_URL: process.env.CONTENT_SERVICE_URL || 'http://localhost:3002',
   MEDIA_SERVICE_URL: process.env.MEDIA_SERVICE_URL || 'http://localhost:3003',
   // Service timeouts (in milliseconds)
-  SERVICE_TIMEOUT: Number.parseInt(process.env.SERVICE_TIMEOUT || '30000', 10),
+  SERVICE_TIMEOUT: Number.parseInt(process.env.SERVICE_TIMEOUT || '60000', 10),
 
   // Rate limiting
   RATE_LIMIT_MAX: Number.parseInt(process.env.RATE_LIMIT_MAX || '100', 10),

@@ -167,11 +167,9 @@ export const errorHandler = (
 
   // Send error response
   reply.status(statusCode).send({
-    error: {
-      message: sanitized.message,
-      code: errorCode,
-      ...(sanitized.details && { details: sanitized.details }),
-    },
+    error: sanitized.message,
+    code: errorCode,
+    ...(sanitized.details && { details: sanitized.details }),
     timestamp: new Date().toISOString(),
     path: request.url,
   });

@@ -1,7 +1,6 @@
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import jwt from 'jsonwebtoken';
-import { env } from '@/config/env';
 import { authLogger } from '@/utils/logger';
+import { authProxy } from '@/proxies/auth.proxy';
 
 export interface JwtPayload {
   userId: string;
@@ -55,49 +54,36 @@ export const authMiddleware = async (request: FastifyRequest, reply: FastifyRepl
       return;
     }
 
-    const decoded = jwt.verify(token, env.JWT_SECRET) as JwtPayload;
+    // Verify token with auth service
+    const verificationResult = await authProxy.verifyToken(token);
 
-    // Attach user info to request object
-    request.user = {
-      userId: decoded.userId,
-      email: decoded.email,
-    };
-
-    authLogger.debug(
-      {
-        userId: decoded.userId,
-        email: decoded.email,
-        path: request.url,
-      },
-      'User authenticated successfully'
-    );
-  } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
+    if (!verificationResult.valid) {
       authLogger.warn(
         {
           ip: request.ip,
           path: request.url,
-          expiredAt: error.expiredAt,
         },
-        'JWT token expired'
-      );
-      reply.status(401).send({ error: 'Unauthorized', message: 'Token expired' });
-      return;
-    }
-
-    if (error instanceof jwt.JsonWebTokenError) {
-      authLogger.warn(
-        {
-          ip: request.ip,
-          path: request.url,
-          error: error.message,
-        },
-        'Invalid JWT token'
+        'Token verification failed'
       );
       reply.status(401).send({ error: 'Unauthorized', message: 'Invalid token' });
       return;
     }
 
+    // Attach user info to request object
+    request.user = {
+      userId: verificationResult.userId || '',
+      email: verificationResult.email || '',
+    };
+
+    authLogger.debug(
+      {
+        userId: verificationResult.userId,
+        email: verificationResult.email,
+        path: request.url,
+      },
+      'User authenticated successfully'
+    );
+  } catch (error) {
     authLogger.error(
       {
         error: error instanceof Error ? error.message : 'Unknown error',

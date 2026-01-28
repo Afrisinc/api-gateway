@@ -8,16 +8,17 @@ export class ContentProxy {
 
   async generateContent(request: FastifyRequest, reply: FastifyReply): Promise<void> {
     try {
-      const response = await httpClient.forward(`${this.baseUrl}/ai/generate`, {
+      const response = await httpClient.forward(`${this.baseUrl}/content/ai/generate`, {
         method: 'POST',
         headers: request.headers as Record<string, string>,
         data: request.body,
       });
 
-      reply.status(response.status).send(response.data);
+      const statusCode = (response.data as any)?.success ? 201 : response.status;
+      reply.status(statusCode).send(response.data);
     } catch (error) {
       proxyLogger.error({ error }, 'Generate content proxy failed');
-      reply.status(503).send({ message: 'Content service unavailable' });
+      reply.status(503).send({ success: false, message: 'Content service unavailable', error: 'Service unavailable' });
     }
   }
 }

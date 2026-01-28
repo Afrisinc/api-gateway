@@ -90,6 +90,7 @@ export const AuthSchemas = {
     type: 'object',
     title: 'User Login Response',
     description: 'Successful login response with authentication token',
+    additionalProperties: true,
     properties: {
       success: {
         type: 'boolean',
@@ -108,9 +109,11 @@ export const AuthSchemas = {
       },
       data: {
         type: 'object',
+        additionalProperties: true,
         properties: {
           user: {
             type: 'object',
+            additionalProperties: true,
             description: 'User information',
             properties: {
               id: {
@@ -187,53 +190,94 @@ export const AuthSchemas = {
     type: 'object',
     title: 'User Registration Response',
     description: 'Successful registration response',
+    additionalProperties: true,
     properties: {
+      success: {
+        type: 'boolean',
+        description: 'Success status',
+        example: true,
+      },
+      resp_msg: {
+        type: 'string',
+        description: 'Response message',
+        example: 'User registered successfully',
+      },
+      resp_code: {
+        type: 'number',
+        description: 'Response code',
+        example: 1001,
+      },
       data: {
         type: 'object',
+        additionalProperties: true,
         properties: {
-          userId: {
-            type: 'string',
-            description: 'Newly created user ID',
-            example: '507f1f77bcf86cd799439011',
+          user: {
+            type: 'object',
+            additionalProperties: true,
+            description: 'User information',
+            properties: {
+              id: {
+                type: 'string',
+                description: 'Newly created user ID',
+                example: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+              },
+              email: {
+                type: 'string',
+                format: 'email',
+                description: 'Registered email address',
+                example: 'john.doe@example.com',
+              },
+              firstName: {
+                type: 'string',
+                description: 'User first name',
+                example: 'John',
+              },
+              lastName: {
+                type: 'string',
+                description: 'User last name',
+                example: 'Doe',
+              },
+              phone: {
+                type: 'string',
+                description: 'User phone number',
+                example: '+1234567890',
+              },
+              tin: {
+                type: 'string',
+                description: 'Tax identification number',
+                example: '',
+              },
+              companyName: {
+                type: 'string',
+                description: 'Company name',
+                example: '',
+              },
+              createdAt: {
+                type: 'string',
+                format: 'date-time',
+                description: 'Account creation timestamp',
+                example: '2024-01-27T10:30:00Z',
+              },
+              updatedAt: {
+                type: 'string',
+                format: 'date-time',
+                description: 'Last account update timestamp',
+                example: '2024-01-27T10:30:00Z',
+              },
+              lastLogin: {
+                type: 'string',
+                description: 'Last login timestamp',
+                example: '',
+              },
+            },
           },
-          email: {
+          token: {
             type: 'string',
-            format: 'email',
-            description: 'Registered email address',
-            example: 'john.doe@example.com',
-          },
-          firstName: {
-            type: 'string',
-            description: 'User first name',
-            example: 'John',
-          },
-          lastName: {
-            type: 'string',
-            description: 'User last name',
-            example: 'Doe',
-          },
-          phone: {
-            type: 'string',
-            description: 'User phone number',
-            example: '+1234567890',
-          },
-          emailVerificationRequired: {
-            type: 'boolean',
-            description: 'Whether email verification is required',
-            example: true,
-          },
-          createdAt: {
-            type: 'string',
-            format: 'date-time',
-            description: 'Account creation timestamp',
-            example: '2024-01-27T10:30:00Z',
+            description: 'JWT authentication token',
+            example:
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4MTc0NGVkOC02OTdiLTRjMTktYWM5ZS1hYmExYTU1Y2IzNDIiLCJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJpYXQiOjE3Njk1NDgwMDUsImV4cCI6MTc3MDE1MjgwNX0.aZ0zY0Yp2cjB5bCp9K5LiI2_l4YSqh8h4l8_uydJteY',
           },
         },
-      },
-      message: {
-        type: 'string',
-        description: 'Success message',
-        example: 'User registered successfully. Please verify your email.',
       },
     },
   },
@@ -347,28 +391,27 @@ export const AuthSchemas = {
     type: 'object',
     title: 'Error Response',
     description: 'Standard error response format',
-    required: ['message'],
+    additionalProperties: true,
     properties: {
-      message: {
+      success: {
+        type: 'boolean',
+        description: 'Success status (false for errors)',
+        example: false,
+      },
+      resp_msg: {
         type: 'string',
         description: 'Error message',
         example: 'Invalid email or password',
       },
-      code: {
-        type: 'string',
+      resp_code: {
+        type: 'number',
         description: 'Error code for client handling',
-        example: 'INVALID_CREDENTIALS',
+        example: 2000,
       },
-      details: {
-        type: 'object',
-        description: 'Additional error details',
-        additionalProperties: true,
-      },
-      timestamp: {
+      message: {
         type: 'string',
-        format: 'date-time',
-        description: 'Error timestamp',
-        example: '2024-01-27T10:30:00Z',
+        description: 'Error message (fallback)',
+        example: 'Invalid email or password',
       },
     },
   },

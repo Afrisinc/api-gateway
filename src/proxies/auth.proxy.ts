@@ -14,10 +14,11 @@ export class AuthProxy {
         data: request.body,
       });
 
-      reply.status(response.status).send(response.data);
+      const statusCode = (response.data as any)?.success ? 201 : response.status;
+      reply.status(statusCode).send(response.data);
     } catch (error) {
       proxyLogger.error({ error }, 'Auth register proxy failed');
-      reply.status(503).send({ message: 'Authentication service unavailable' });
+      reply.status(503).send({ success: false, resp_msg: 'Authentication service unavailable', resp_code: 5003 });
     }
   }
 
@@ -29,22 +30,32 @@ export class AuthProxy {
         data: request.body,
       });
 
-      reply.status(response.status).send(response.data);
+      const statusCode = (response.data as any)?.success ? 200 : response.status;
+      reply.status(statusCode).send(response.data);
     } catch (error) {
       proxyLogger.error({ error }, 'Auth login proxy failed');
-      reply.status(503).send({ message: 'Authentication service unavailable' });
+      reply.status(503).send({ success: false, resp_msg: 'Authentication service unavailable', resp_code: 5003 });
     }
   }
 
-  async verifyToken(token: string): Promise<{ valid: boolean; userId?: string }> {
+  async verifyToken(token: string): Promise<{ valid: boolean; userId?: string; email?: string }> {
     try {
       const response = await httpClient.forward(`${this.baseUrl}/auth/verify`, {
         method: 'POST',
-        headers: { authorization: `Bearer ${token}` },
+        headers: {
+          authorization: `Bearer ${token}`,
+          'content-type': 'application/json',
+        },
+        data: {},
       });
 
       if (response.status === 200) {
-        return { valid: true, userId: (response.data as any)?.userId };
+        const data = response.data as any;
+        return {
+          valid: true,
+          userId: data?.data?.userId || data?.userId,
+          email: data?.data?.email || data?.email,
+        };
       }
 
       return { valid: false };
@@ -62,10 +73,11 @@ export class AuthProxy {
         data: request.body,
       });
 
-      reply.status(response.status).send(response.data);
+      const statusCode = (response.data as any)?.success ? 200 : response.status;
+      reply.status(statusCode).send(response.data);
     } catch (error) {
       proxyLogger.error({ error }, 'Forgot password proxy failed');
-      reply.status(503).send({ message: 'Authentication service unavailable' });
+      reply.status(503).send({ success: false, resp_msg: 'Authentication service unavailable', resp_code: 5003 });
     }
   }
 
@@ -77,10 +89,11 @@ export class AuthProxy {
         data: request.body,
       });
 
-      reply.status(response.status).send(response.data);
+      const statusCode = (response.data as any)?.success ? 200 : response.status;
+      reply.status(statusCode).send(response.data);
     } catch (error) {
       proxyLogger.error({ error }, 'Reset password proxy failed');
-      reply.status(503).send({ message: 'Authentication service unavailable' });
+      reply.status(503).send({ success: false, resp_msg: 'Authentication service unavailable', resp_code: 5003 });
     }
   }
 }
