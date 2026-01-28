@@ -6,7 +6,7 @@ import type { FastifySwaggerUiOptions } from '@fastify/swagger-ui';
  */
 const getServerUrl = (): string => {
   if (env.NODE_ENV === 'production') {
-    return process.env.API_BASE_URL || 'https://api.afrisinc.com';
+    return env.API_BASE_URL || 'https://api.afrisinc.com';
   }
   return `http://localhost:${env.PORT}`;
 };

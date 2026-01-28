@@ -5,11 +5,11 @@ export const env = {
   PORT: Number.parseInt(process.env.PORT || '3000', 10),
   JWT_SECRET: process.env.JWT_SECRET || 'fallback-secret-key-change-in-production',
 
+  API_BASE_URL: process.env.API_BASE_URL || `http://localhost:${process.env.PORT || 3000}`,
   // Microservice URLs
   AUTH_SERVICE_URL: process.env.AUTH_SERVICE_URL || 'http://localhost:3001',
   CONTENT_SERVICE_URL: process.env.CONTENT_SERVICE_URL || 'http://localhost:3002',
   MEDIA_SERVICE_URL: process.env.MEDIA_SERVICE_URL || 'http://localhost:3003',
-
   // Service timeouts (in milliseconds)
   SERVICE_TIMEOUT: Number.parseInt(process.env.SERVICE_TIMEOUT || '30000', 10),
 
