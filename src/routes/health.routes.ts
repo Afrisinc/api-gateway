@@ -6,7 +6,7 @@ export const registerHealthRoutes = async (app: FastifyInstance): Promise<void> 
     '/health',
     {
       schema: {
-        tags: ['Default'],
+        tags: ['Health'],
         description: 'Health check endpoint',
       },
     },
@@ -26,7 +26,7 @@ export const registerHealthRoutes = async (app: FastifyInstance): Promise<void> 
     '/health/live',
     {
       schema: {
-        tags: ['Default'],
+        tags: ['Health'],
         description: 'Liveness probe',
       },
     },
@@ -39,7 +39,7 @@ export const registerHealthRoutes = async (app: FastifyInstance): Promise<void> 
     '/health/ready',
     {
       schema: {
-        tags: ['Default'],
+        tags: ['Health'],
         description: 'Readiness probe',
       },
     },

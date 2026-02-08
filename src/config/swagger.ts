@@ -52,10 +52,43 @@ export const swaggerConfig = {
       },
     },
     tags: [
-      { name: 'Auth', description: 'Authentication endpoints' },
+      // Auth Microservice
+      { name: 'Auth', description: 'User authentication and account management' },
+
+      // VPN Microservice
+      { name: 'VPN Users', description: 'VPN user account management' },
+      { name: 'Devices', description: 'Device registration and management' },
+      { name: 'Servers', description: 'VPN server administration and management' },
+      { name: 'Usage', description: 'User and device data usage statistics' },
+
+      // Content Microservice
       { name: 'Content', description: 'Content management endpoints' },
-      { name: 'Default', description: 'Default endpoints' },
+
+      // System
+      { name: 'Health', description: 'Health check and status endpoints' },
     ],
+    'x-tagGroups': [
+      {
+        name: 'Authentication Service',
+        description: 'User authentication, registration, and account management',
+        tags: ['Auth'],
+      },
+      {
+        name: 'VPN Microservice',
+        description: 'Complete VPN management including users, devices, servers, and usage tracking',
+        tags: ['VPN Users', 'Devices', 'Servers', 'Usage'],
+      },
+      {
+        name: 'Content Service',
+        description: 'Content management and delivery',
+        tags: ['Content'],
+      },
+      {
+        name: 'System',
+        description: 'System health and monitoring',
+        tags: ['Health'],
+      },
+    ] as any,
     externalDocs: {
       description: 'Afrisinc Documentation',
       url: 'https://afrisinc.com',
