@@ -8,11 +8,11 @@ export class AccountProxy {
 
   async getAllAccounts(request: FastifyRequest, reply: FastifyReply): Promise<void> {
     try {
-      const querystring = request.query as Record<string, string>;
+      const params = request.query as Record<string, string>;
       const response = await httpClient.forward(`${this.baseUrl}/accounts/all`, {
         method: 'GET',
         headers: request.headers as Record<string, string>,
-        querystring,
+        params,
       });
 
       const statusCode = (response.data as any)?.success ? 200 : response.status;

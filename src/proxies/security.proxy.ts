@@ -8,11 +8,11 @@ export class SecurityProxy {
 
   async getSecurityOverview(request: FastifyRequest, reply: FastifyReply): Promise<void> {
     try {
-      const querystring = request.query as Record<string, string>;
+      const params = request.query as Record<string, string>;
       const response = await httpClient.forward(`${this.baseUrl}/platform/security/overview`, {
         method: 'GET',
         headers: request.headers as Record<string, string>,
-        querystring,
+        params,
       });
 
       const statusCode = (response.data as any)?.success ? 200 : response.status;

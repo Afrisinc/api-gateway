@@ -40,11 +40,11 @@ export class ProductProxy {
   async getProductAccounts(request: FastifyRequest, reply: FastifyReply): Promise<void> {
     try {
       const { productId } = request.params as { productId: string };
-      const querystring = request.query as Record<string, string>;
+      const params = request.query as Record<string, string>;
       const response = await httpClient.forward(`${this.baseUrl}/products/${productId}/accounts`, {
         method: 'GET',
         headers: request.headers as Record<string, string>,
-        querystring,
+        params,
       });
 
       const statusCode = (response.data as any)?.success ? 200 : response.status;
