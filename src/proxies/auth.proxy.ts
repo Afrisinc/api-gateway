@@ -96,6 +96,22 @@ export class AuthProxy {
       reply.status(503).send({ success: false, resp_msg: 'Authentication service unavailable', resp_code: 5003 });
     }
   }
+
+  async verify(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+    try {
+      const response = await httpClient.forward(`${this.baseUrl}/auth/verify`, {
+        method: 'POST',
+        headers: request.headers as Record<string, string>,
+        data: {},
+      });
+
+      const statusCode = (response.data as any)?.success ? 200 : response.status;
+      reply.status(statusCode).send(response.data);
+    } catch (error) {
+      proxyLogger.error({ error }, 'Token verification proxy failed');
+      reply.status(503).send({ success: false, resp_msg: 'Authentication service unavailable', resp_code: 5003 });
+    }
+  }
 }
 
 export const authProxy = new AuthProxy();

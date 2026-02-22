@@ -119,3 +119,5 @@ export const optionalAuthMiddleware = async (request: FastifyRequest, reply: Fas
     );
   }
 };
+
+export const authGuard = authMiddleware;

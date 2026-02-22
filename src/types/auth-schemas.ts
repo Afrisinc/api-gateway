@@ -384,6 +384,61 @@ export const AuthSchemas = {
   },
 
   /**
+   * Verify Token Response Schema
+   * Returned from POST /auth/verify
+   */
+  verifyResponse: {
+    type: 'object',
+    title: 'Verify Token Response',
+    description: 'Token verification result',
+    additionalProperties: true,
+    properties: {
+      success: {
+        type: 'boolean',
+        description: 'Success status',
+        example: true,
+      },
+      resp_msg: {
+        type: 'string',
+        description: 'Response message',
+        example: 'Token verified successfully',
+      },
+      resp_code: {
+        type: 'number',
+        description: 'Response code',
+        example: 1000,
+      },
+      data: {
+        type: 'object',
+        additionalProperties: true,
+        properties: {
+          userId: {
+            type: 'string',
+            description: 'User ID from token',
+            example: '81744ed8-697b-4c19-ac9e-aba1a55cb342',
+          },
+          email: {
+            type: 'string',
+            format: 'email',
+            description: 'User email from token',
+            example: 'user@example.com',
+          },
+          iat: {
+            type: 'number',
+            description: 'Token issued at (Unix timestamp)',
+            example: 1769548005,
+          },
+          exp: {
+            type: 'number',
+            description: 'Token expiration (Unix timestamp)',
+            example: 1770152805,
+          },
+        },
+      },
+    },
+  },
+
+  /**
    * Error Response Schema
    * Used for all error responses
    */

@@ -104,4 +104,28 @@ export const registerAuthRoutes = async (app: FastifyInstance): Promise<void> =>
       await authProxy.resetPassword(request, reply);
     }
   );
+
+  /**
+   * POST /auth/verify
+   * Verify JWT token validity
+   */
+  app.post(
+    '/auth/verify',
+    {
+      schema: {
+        tags: ['Auth'],
+        summary: 'Verify Token',
+        description: 'Verify the validity of a JWT token. Returns token data if valid.',
+        response: {
+          200: AuthSchemas.verifyResponse,
+          400: AuthSchemas.errorResponse,
+          401: AuthSchemas.errorResponse,
+          503: AuthSchemas.errorResponse,
+        },
+      },
+    },
+    async (request, reply) => {
+      await authProxy.verify(request, reply);
+    }
+  );
 };
