@@ -1,13 +1,13 @@
 import type { FastifyInstance } from 'fastify';
 import { registerHealthRoutes } from './health.routes';
-import { registerAuthRoutes } from './auth.routes';
+import { registerAuthRoutes } from './auth.ms/auth.routes';
 import { registerContentRoutes } from './content.routes';
-import { registerUserRoutes } from './user.routes';
-import { registerAccountRoutes } from './account.routes';
-import { registerOrganizationRoutes } from './organization.routes';
-import { registerPlatformRoutes } from './platform.routes';
-import { registerProductRoutes } from './product.routes';
-import { registerSecurityRoutes } from './security.routes';
+import { registerUserRoutes } from './auth.ms/user.routes';
+import { registerAccountRoutes } from './auth.ms/account.routes';
+import { registerOrganizationRoutes } from './auth.ms/organization.routes';
+import { registerPlatformRoutes } from './auth.ms/platform.routes';
+import { registerProductRoutes } from './auth.ms/product.routes';
+import { registerSecurityRoutes } from './auth.ms/security.routes';
 import { registerVpnMicroservice } from './vpn';
 
 export const registerRoutes = async (app: FastifyInstance): Promise<void> => {

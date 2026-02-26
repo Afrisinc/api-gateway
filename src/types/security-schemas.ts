@@ -178,4 +178,97 @@ export const SecuritySchemas = {
       },
     },
   },
+
+  /**
+   * Get Security Overview Query Schema
+   * Used for GET /platform/security/overview
+   */
+  getSecurityLoginEventsQuery: {
+    type: 'object',
+    properties: {
+      page: {
+        type: 'integer',
+        minimum: 1,
+        default: 1,
+        description: 'Page number for pagination',
+      },
+      limit: {
+        type: 'integer',
+        minimum: 1,
+        maximum: 100,
+        default: 10,
+        description: 'Number of records per page',
+      },
+      search: {
+        type: 'string',
+        description: 'Search by user name (first/last), phone number, or IP address',
+      },
+      sortBy: {
+        type: 'string',
+        enum: ['asc', 'desc'],
+        default: 'desc',
+        description: 'Sort by date - "asc" for oldest first, "desc" for newest first',
+      },
+    },
+  },
+
+  /**
+   * Get Security Overview Response Schema
+   * Returned from GET /platform/security/overview
+   */
+  getSecurityLoginEventsResponse: {
+    type: 'object',
+    title: 'Get Security Overview Response',
+    description: 'Comprehensive security monitoring data',
+    additionalProperties: true,
+    properties: {
+      success: {
+        type: 'boolean',
+        description: 'Success status',
+        example: true,
+      },
+      resp_msg: {
+        type: 'string',
+        description: 'Response message',
+        example: 'Login events retrieved successfully',
+      },
+      resp_code: {
+        type: 'number',
+        description: 'Response code',
+        example: 1000,
+      },
+      data: {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                id: { type: 'string', example: 'event-123' },
+                type: { type: 'string', enum: ['login_event', 'login_failure'], example: 'login_event' },
+                userId: { type: 'string', example: 'user-456' },
+                email: { type: 'string', example: 'user@example.com' },
+                name: { type: 'string', example: 'John Doe' },
+                phone: { type: 'string', example: '1234567890' },
+                status: { type: 'string', example: 'success' },
+                ip: { type: 'string', example: '192.168.1.100' },
+                reason: { type: 'string', example: 'Invalid password' },
+                createdAt: { type: 'string', format: 'date-time', example: '2026-02-26T10:30:00.000Z' },
+              },
+            },
+          },
+          pagination: {
+            type: 'object',
+            properties: {
+              page: { type: 'integer', example: 1 },
+              limit: { type: 'integer', example: 10 },
+              total: { type: 'integer', example: 50 },
+              pages: { type: 'integer', example: 5 },
+            },
+          },
+        },
+      },
+    },
+  },
 };
