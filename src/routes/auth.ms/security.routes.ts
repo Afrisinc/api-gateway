@@ -30,4 +30,25 @@ export const registerSecurityRoutes = async (app: FastifyInstance): Promise<void
       await securityProxy.getSecurityOverview(request, reply);
     }
   );
+  app.get(
+    '/platform/security/loginevents',
+    {
+      preHandler: authGuard,
+      schema: {
+        tags: ['Security'],
+        summary: 'Login events',
+        description: 'Returns login events. Requires authentication.',
+        querystring: SecuritySchemas.getSecurityLoginEventsQuery,
+        response: {
+          200: SecuritySchemas.getSecurityLoginEventsResponse,
+          400: SecuritySchemas.errorResponse,
+          401: SecuritySchemas.errorResponse,
+          503: SecuritySchemas.errorResponse,
+        },
+      },
+    },
+    async (request, reply) => {
+      await securityProxy.getSecurityLoginEvents(request, reply);
+    }
+  );
 };

@@ -22,6 +22,22 @@ export class SecurityProxy {
       reply.status(503).send({ success: false, resp_msg: 'Authentication service unavailable', resp_code: 5003 });
     }
   }
+  async getSecurityLoginEvents(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+    try {
+      const params = request.query as Record<string, string>;
+      const response = await httpClient.forward(`${this.baseUrl}/platform/security/loginevents`, {
+        method: 'GET',
+        headers: request.headers as Record<string, string>,
+        params,
+      });
+
+      const statusCode = (response.data as any)?.success ? 200 : response.status;
+      reply.status(statusCode).send(response.data);
+    } catch (error) {
+      proxyLogger.error({ error }, 'Get security login events proxy failed');
+      reply.status(503).send({ success: false, resp_msg: 'Authentication service unavailable', resp_code: 5003 });
+    }
+  }
 }
 
 export const securityProxy = new SecurityProxy();
