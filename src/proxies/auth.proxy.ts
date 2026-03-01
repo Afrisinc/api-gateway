@@ -7,6 +7,7 @@ export class AuthProxy {
   private readonly baseUrl = env.AUTH_SERVICE_URL;
 
   async register(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+    console.log('AuthProxy.register called with body:', request.body);
     try {
       const response = await httpClient.forward(`${this.baseUrl}/auth/register`, {
         method: 'POST',
@@ -110,6 +111,37 @@ export class AuthProxy {
     } catch (error) {
       proxyLogger.error({ error }, 'Token verification proxy failed');
       reply.status(503).send({ success: false, resp_msg: 'Authentication service unavailable', resp_code: 5003 });
+    }
+  }
+
+  async verifyEmail(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+    try {
+      const { token } = request.query as { token: string };
+      const response = await httpClient.forward(`${this.baseUrl}/auth/verify-email?token=${token}`, {
+        method: 'GET',
+        headers: request.headers as Record<string, string>,
+      });
+
+      const statusCode = (response.data as any)?.success ? 200 : response.status;
+      reply.status(statusCode).send(response.data);
+    } catch (error) {
+      proxyLogger.error({ error }, 'Email verification proxy failed');
+      reply.status(503).send({ success: false, message: 'Authentication service unavailable' });
+    }
+  }
+  async exchangeCodeForToken(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+    try {
+      const response = await httpClient.forward(`${this.baseUrl}/oauth/exchange`, {
+        method: 'POST',
+        headers: request.headers as Record<string, string>,
+        data: request.body,
+      });
+
+      const statusCode = (response.data as any)?.success ? 200 : response.status;
+      reply.status(statusCode).send(response.data);
+    } catch (error) {
+      proxyLogger.error({ error }, 'Email verification proxy failed');
+      reply.status(503).send({ success: false, message: 'Authentication service unavailable' });
     }
   }
 }
