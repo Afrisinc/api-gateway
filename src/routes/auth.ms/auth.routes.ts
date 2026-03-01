@@ -128,4 +128,52 @@ export const registerAuthRoutes = async (app: FastifyInstance): Promise<void> =>
       await authProxy.verify(request, reply);
     }
   );
+
+  /**
+   * GET /auth/verify-email
+   * Verify email with token from email link
+   */
+  app.get(
+    '/auth/verify-email',
+    {
+      schema: {
+        tags: ['Auth'],
+        summary: 'Verify Email',
+        description: 'Verify user email address using verification token sent via email link.',
+        querystring: AuthSchemas.verifyEmailRequest,
+        response: {
+          200: AuthSchemas.verifyEmailResponse,
+          400: AuthSchemas.errorResponse,
+          503: AuthSchemas.errorResponse,
+        },
+      },
+    },
+    async (request, reply) => {
+      await authProxy.verifyEmail(request, reply);
+    }
+  );
+
+  /**
+   * POST /oauth/exchange
+   * Exchange authorization code for access token
+   */
+  app.post(
+    '/oauth/exchange',
+    {
+      schema: {
+        tags: ['Auth'],
+        summary: 'Exchange Authorization Code for Token',
+        description: 'Exchange an authorization code for an access token.',
+        body: AuthSchemas.exchangeCodeForTokenRequest,
+        response: {
+          200: AuthSchemas.exchangeCodeForTokenResponse,
+          400: AuthSchemas.errorResponse,
+          503: AuthSchemas.errorResponse,
+        },
+      },
+    },
+    async (request, reply) => {
+      await authProxy.exchangeCodeForToken(request, reply);
+    }
+  );
 };
