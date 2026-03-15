@@ -11,7 +11,7 @@ export const registerAuthRoutes = async (app: FastifyInstance): Promise<void> =>
     '/auth/register',
     {
       schema: {
-        tags: ['Auth'],
+        tags: ['Auth - Core'],
         summary: 'User Registration',
         description: 'Register a new user account with email, password, and personal details. Email must be unique.',
         body: AuthSchemas.registerRequest,
@@ -36,7 +36,7 @@ export const registerAuthRoutes = async (app: FastifyInstance): Promise<void> =>
     '/auth/login',
     {
       schema: {
-        tags: ['Auth'],
+        tags: ['Auth - Core'],
         summary: 'User Login',
         description: 'Authenticate user with email and password. Returns JWT access and refresh tokens.',
         body: AuthSchemas.loginRequest,
@@ -61,7 +61,7 @@ export const registerAuthRoutes = async (app: FastifyInstance): Promise<void> =>
     '/auth/forgot-password',
     {
       schema: {
-        tags: ['Auth'],
+        tags: ['Auth - Security'],
         summary: 'Forgot Password',
         description:
           'Request a password reset link. A reset token or OTP will be sent to the registered email address.',
@@ -87,7 +87,7 @@ export const registerAuthRoutes = async (app: FastifyInstance): Promise<void> =>
     '/auth/reset-password',
     {
       schema: {
-        tags: ['Auth'],
+        tags: ['Auth - Security'],
         summary: 'Reset Password',
         description:
           'Reset password using either a token (from email link) or OTP (from email/SMS). Password must meet complexity requirements.',
@@ -113,7 +113,7 @@ export const registerAuthRoutes = async (app: FastifyInstance): Promise<void> =>
     '/auth/verify',
     {
       schema: {
-        tags: ['Auth'],
+        tags: ['Auth - Security'],
         summary: 'Verify Token',
         description: 'Verify the validity of a JWT token. Returns token data if valid.',
         response: {
@@ -137,7 +137,7 @@ export const registerAuthRoutes = async (app: FastifyInstance): Promise<void> =>
     '/auth/verify-email',
     {
       schema: {
-        tags: ['Auth'],
+        tags: ['Auth - Security'],
         summary: 'Verify Email',
         description: 'Verify user email address using verification token sent via email link.',
         querystring: AuthSchemas.verifyEmailRequest,
@@ -161,7 +161,7 @@ export const registerAuthRoutes = async (app: FastifyInstance): Promise<void> =>
     '/oauth/exchange',
     {
       schema: {
-        tags: ['Auth'],
+        tags: ['Auth - Core'],
         summary: 'Exchange Authorization Code for Token',
         description: 'Exchange an authorization code for an access token.',
         body: AuthSchemas.exchangeCodeForTokenRequest,

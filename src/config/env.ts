@@ -11,6 +11,7 @@ export const env = {
   CONTENT_SERVICE_URL: process.env.CONTENT_SERVICE_URL || 'http://localhost:3002',
   MEDIA_SERVICE_URL: process.env.MEDIA_SERVICE_URL || 'http://localhost:3003',
   VPN_SERVICE_URL: process.env.VPN_SERVICE_URL || 'http://localhost:8080',
+  NOTIFICATION_SERVICE_URL: process.env.NOTIFICATION_SERVICE_URL || 'http://localhost:3004',
   // Service timeouts (in milliseconds)
   SERVICE_TIMEOUT: Number.parseInt(process.env.SERVICE_TIMEOUT || '60000', 10),
 
