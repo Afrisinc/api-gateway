@@ -140,4 +140,106 @@ export const registerNotificationPlatformRoutes = async (app: FastifyInstance): 
       await notificationProxy.getUserById(request, reply);
     }
   );
+
+  // ── Plans Management ────────────────────────────────────────────────────────
+
+  /** GET /notifications/plans — List all subscription plans (from notify service admin API) */
+  app.get(
+    '/notifications/plans',
+    {
+      schema: {
+        tags: ['Notifications - Plans'],
+        summary: 'List Plans',
+        response: {
+          200: { type: 'object', additionalProperties: true },
+          503: { type: 'object', additionalProperties: true },
+        },
+      },
+    },
+    async (request, reply) => {
+      await notificationProxy.getPlans(request, reply);
+    }
+  );
+
+  // ── Account Listing & Limit Management ─────────────────────────────────────
+
+  /** GET /notifications/accounts — List all users with their accounts */
+  app.get(
+    '/notifications/accounts',
+    {
+      schema: {
+        tags: ['Notifications - Accounts'],
+        summary: 'List Users with Accounts',
+        response: {
+          200: { type: 'object', additionalProperties: true },
+          503: { type: 'object', additionalProperties: true },
+        },
+      },
+    },
+    async (request, reply) => {
+      await notificationProxy.getAccounts(request, reply);
+    }
+  );
+
+  /** GET /notifications/accounts/:accountId/limits — Get account limit overrides */
+  app.get(
+    '/notifications/accounts/:accountId/limits',
+    {
+      schema: {
+        tags: ['Notifications - Accounts'],
+        summary: 'Get Account Limit Overrides',
+        params: { type: 'object', required: ['accountId'], properties: { accountId: { type: 'string' } } },
+        response: {
+          200: { type: 'object', additionalProperties: true },
+          503: { type: 'object', additionalProperties: true },
+        },
+      },
+    },
+    async (request, reply) => {
+      await notificationProxy.getAccountLimits(request, reply);
+    }
+  );
+
+  /** POST /notifications/accounts/:accountId/limits/override — Set a single limit override */
+  app.post(
+    '/notifications/accounts/:accountId/limits/override',
+    {
+      schema: {
+        tags: ['Notifications - Accounts'],
+        summary: 'Set Account Limit Override',
+        params: { type: 'object', required: ['accountId'], properties: { accountId: { type: 'string' } } },
+        body: { type: 'object', additionalProperties: true },
+        response: {
+          201: { type: 'object', additionalProperties: true },
+          503: { type: 'object', additionalProperties: true },
+        },
+      },
+    },
+    async (request, reply) => {
+      await notificationProxy.setAccountLimitOverride(request, reply);
+    }
+  );
+
+  /** DELETE /notifications/accounts/:accountId/limits/override/:metric — Remove a limit override */
+  app.delete(
+    '/notifications/accounts/:accountId/limits/override/:metric',
+    {
+      schema: {
+        tags: ['Notifications - Accounts'],
+        summary: 'Remove Account Limit Override',
+        params: {
+          type: 'object',
+          required: ['accountId', 'metric'],
+          properties: { accountId: { type: 'string' }, metric: { type: 'string' } },
+        },
+        response: {
+          200: { type: 'object', additionalProperties: true },
+          503: { type: 'object', additionalProperties: true },
+        },
+      },
+    },
+    async (request, reply) => {
+      await notificationProxy.removeAccountLimitOverride(request, reply);
+    }
+  );
 };
