@@ -389,6 +389,108 @@ export const ProductSchemas = {
   },
 
   /**
+   * Get User Products Response Schema
+   * Used for GET /products/me
+   */
+  getUserProductsResponse: {
+    type: 'object',
+    title: 'Get User Products Response',
+    description: 'Products assigned to the logged in user',
+    additionalProperties: true,
+    properties: {
+      success: {
+        type: 'boolean',
+        description: 'Success status',
+        example: true,
+      },
+      resp_msg: {
+        type: 'string',
+        description: 'Response message',
+        example: 'User products retrieved successfully',
+      },
+      resp_code: {
+        type: 'number',
+        description: 'Response code',
+        example: 1000,
+      },
+      data: {
+        type: 'array',
+        description: 'Array of products assigned to the user',
+        items: {
+          type: 'object',
+          additionalProperties: true,
+          properties: {
+            id: {
+              type: 'string',
+              description: 'Product ID',
+              example: 'prod_123456789',
+            },
+            name: {
+              type: 'string',
+              description: 'Product name',
+              example: 'Email Notifications',
+            },
+            code: {
+              type: 'string',
+              description: 'Product code',
+              example: 'notify',
+            },
+            description: {
+              type: ['string', 'null'],
+              description: 'Product description',
+              example: 'Email notification service for applications',
+            },
+            status: {
+              type: 'string',
+              description: 'Product status',
+              example: 'LIVE',
+            },
+            baseUrl: {
+              type: ['string', 'null'],
+              description: 'Product base URL',
+              example: 'https://notify.example.com',
+            },
+            enrollment: {
+              type: 'object',
+              description: 'User enrollment details for this product',
+              properties: {
+                enrollmentId: {
+                  type: 'string',
+                  description: 'Enrollment ID',
+                },
+                accountId: {
+                  type: 'string',
+                  description: 'Account ID',
+                },
+                accountType: {
+                  type: 'string',
+                  enum: ['INDIVIDUAL', 'ORGANIZATION'],
+                  description: 'Account type',
+                },
+                status: {
+                  type: 'string',
+                  enum: ['ACTIVE', 'SUSPENDED', 'PENDING'],
+                  description: 'Enrollment status',
+                },
+                plan: {
+                  type: 'string',
+                  enum: ['FREE', 'PRO', 'ENTERPRISE'],
+                  description: 'Subscription plan',
+                },
+                enrolledAt: {
+                  type: 'string',
+                  format: 'date-time',
+                  description: 'Enrollment timestamp',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
+  /**
    * Error Response Schema
    * Used for all error responses
    */

@@ -57,6 +57,30 @@ export const registerProductRoutes = async (app: FastifyInstance): Promise<void>
   );
 
   /**
+   * GET /products/me
+   * Get logged in user's assigned products
+   */
+  app.get(
+    '/products/me',
+    {
+      preHandler: authGuard,
+      schema: {
+        tags: ['Products'],
+        summary: 'Get user products',
+        description: 'Retrieve all products assigned to the logged in user. Requires authentication.',
+        response: {
+          200: ProductSchemas.getUserProductsResponse,
+          401: ProductSchemas.errorResponse,
+          503: ProductSchemas.errorResponse,
+        },
+      },
+    },
+    async (request, reply) => {
+      await productProxy.getUserProducts(request, reply);
+    }
+  );
+
+  /**
    * GET /products/:productId/accounts
    * Get accounts enrolled in a specific product
    */

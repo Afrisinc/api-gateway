@@ -1,12 +1,12 @@
-name: Deploy API Gateway QA
+name: Deploy API Gateway
 
 on:
   push:
     branches:
-      - develop
+      - main
   pull_request:
     branches:
-      - develop
+      - main
 
 env: {}
 
@@ -45,7 +45,7 @@ jobs:
           images: |
             ghcr.io/${{ secrets.GHCR_OWNER }}/api-gateway
           tags: |
-            type=raw,value=latest
+            type=raw,value=production
             type=sha
 
       - name: Build and push Docker image
@@ -84,7 +84,7 @@ jobs:
 
           script: |
             set -e
-            APP_PATH="${{ secrets.VPS_APP_PATH }}/api-gateway/qa"
+            APP_PATH="${{ secrets.VPS_APP_PATH }}/api-gateway/production"
             cd $APP_PATH
 
             echo "$DEPLOY_GHCR_TOKEN" | docker login ghcr.io -u "$DEPLOY_GHCR_USERNAME" --password-stdin
