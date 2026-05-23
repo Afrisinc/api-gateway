@@ -113,6 +113,36 @@ export const registerContentRoutes = async (app: FastifyInstance): Promise<void>
       await contentProxy.getArticlesByCategory(request, reply);
     }
   );
+  // Must be registered BEFORE /articles/:id to avoid route conflict
+  app.get(
+    '/articles/slug/:slug',
+    {
+      schema: {
+        tags: ['Content'],
+        summary: 'Get Article by Slug',
+        description: "Retrieve a specific article by its slug (doesn't require authentication)",
+        params: {
+          type: 'object',
+          required: ['slug'],
+          properties: {
+            slug: {
+              type: 'string',
+              description: 'Article slug (URL-friendly identifier)',
+            },
+          },
+        },
+        response: {
+          200: ContentSchemas.getArticleBySlugResponse,
+          400: ContentSchemas.errorResponse,
+          404: ContentSchemas.errorResponse,
+          503: ContentSchemas.errorResponse,
+        },
+      },
+    },
+    async (request, reply) => {
+      await contentProxy.getArticleBySlug(request, reply);
+    }
+  );
   app.get(
     '/articles/:id',
     {

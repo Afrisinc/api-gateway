@@ -71,6 +71,22 @@ export class ContentProxy {
     }
   }
 
+  async getArticleBySlug(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+    try {
+      const { slug } = request.params as { slug: string };
+      const response = await httpClient.forward(`${this.baseUrl}/articles/slug/${slug}`, {
+        method: 'GET',
+        headers: request.headers as Record<string, string>,
+      });
+
+      const statusCode = (response.data as any)?.success ? 200 : response.status;
+      reply.status(statusCode).send(response.data);
+    } catch (error) {
+      proxyLogger.error({ error }, 'Get article by slug proxy failed');
+      reply.status(503).send({ success: false, message: 'Content service unavailable', error: 'Service unavailable' });
+    }
+  }
+
   async getAllGeneratedPosts(request: FastifyRequest, reply: FastifyReply): Promise<void> {
     try {
       const response = await httpClient.forward(`${this.baseUrl}/generated-posts`, {

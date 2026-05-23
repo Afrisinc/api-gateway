@@ -267,6 +267,57 @@ export const ContentSchemas = {
   },
 
   /**
+   * Get Article by Slug Response Schema
+   * Response from GET /articles/slug/:slug
+   */
+  getArticleBySlugResponse: {
+    type: 'object',
+    title: 'Get Article by Slug Response',
+    description: 'Get a single article by slug',
+    additionalProperties: true,
+    properties: {
+      success: {
+        type: 'boolean',
+        description: 'Success status',
+        example: true,
+      },
+      resp_msg: {
+        type: 'string',
+        description: 'Response message',
+        example: 'Article retrieved successfully',
+      },
+      resp_code: {
+        type: 'integer',
+        description: 'Response code',
+        example: 1000,
+      },
+      data: {
+        type: 'object',
+        additionalProperties: true,
+        properties: {
+          id: { type: 'string' },
+          guid: { type: 'string' },
+          source_url: { type: 'string' },
+          source_headline: { type: 'string' },
+          source_summary: { type: 'string' },
+          image_url: { type: 'string' },
+          pub_date: { type: 'string' },
+          category: { type: 'string' },
+          creator: { type: 'string' },
+          status: { type: 'string' },
+          is_featured: { type: 'boolean' },
+          slug: { type: 'string' },
+          ai_generated: { type: 'boolean' },
+          tags: { type: 'array', items: { type: 'string' } },
+          read_time: { type: 'integer' },
+          created_at: { type: 'string' },
+          updated_at: { type: 'string' },
+        },
+      },
+    },
+  },
+
+  /**
    * Get All Generated Posts Response Schema
    * Response from GET /generated-posts
    */
