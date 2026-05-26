@@ -8,6 +8,7 @@ import { registerOrganizationRoutes } from './auth.ms/organization.routes';
 import { registerPlatformRoutes } from './auth.ms/platform.routes';
 import { registerProductRoutes } from './auth.ms/product.routes';
 import { registerSecurityRoutes } from './auth.ms/security.routes';
+import { registerAdminRoutes } from './auth.ms/admin.routes';
 import { registerVpnMicroservice } from './vpn';
 import { registerNotificationRoutes } from './notification.ms';
 
@@ -23,6 +24,7 @@ export const registerRoutes = async (app: FastifyInstance): Promise<void> => {
   await registerPlatformRoutes(app);
   await registerProductRoutes(app);
   await registerSecurityRoutes(app);
+  await registerAdminRoutes(app);
 
   // API routes - Content Service
   await registerContentRoutes(app);

@@ -57,6 +57,53 @@ export const registerProductRoutes = async (app: FastifyInstance): Promise<void>
   );
 
   /**
+   * GET /products/public
+   * Get publicly visible products (no auth required)
+   */
+  app.get(
+    '/products/public',
+    {
+      schema: {
+        tags: ['Products'],
+        summary: 'Get public products',
+        description: 'Retrieve publicly visible products (LIVE, COMING_SOON, BETA). No authentication required.',
+        response: {
+          200: ProductSchemas.createProductResponse,
+          503: ProductSchemas.errorResponse,
+        },
+      },
+    },
+    async (request, reply) => {
+      await productProxy.getPublicProducts(request, reply);
+    }
+  );
+
+  /**
+   * GET /products/:productId
+   * Get a single product by ID
+   */
+  app.get(
+    '/products/:productId',
+    {
+      preHandler: authGuard,
+      schema: {
+        tags: ['Products'],
+        summary: 'Get product by ID',
+        description: 'Retrieve a single product by its ID. Requires authentication.',
+        response: {
+          200: ProductSchemas.createProductResponse,
+          401: ProductSchemas.errorResponse,
+          404: ProductSchemas.errorResponse,
+          503: ProductSchemas.errorResponse,
+        },
+      },
+    },
+    async (request, reply) => {
+      await productProxy.getProductById(request, reply);
+    }
+  );
+
+  /**
    * GET /products/:productId/accounts
    * Get accounts enrolled in a specific product
    */

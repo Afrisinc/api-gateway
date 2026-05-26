@@ -54,6 +54,37 @@ export class ProductProxy {
       reply.status(503).send({ success: false, resp_msg: 'Authentication service unavailable', resp_code: 5003 });
     }
   }
+
+  async getPublicProducts(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+    try {
+      const response = await httpClient.forward(`${this.baseUrl}/products/public`, {
+        method: 'GET',
+        headers: request.headers as Record<string, string>,
+      });
+
+      const statusCode = (response.data as any)?.success ? 200 : response.status;
+      reply.status(statusCode).send(response.data);
+    } catch (error) {
+      proxyLogger.error({ error }, 'Get public products proxy failed');
+      reply.status(503).send({ success: false, resp_msg: 'Authentication service unavailable', resp_code: 5003 });
+    }
+  }
+
+  async getProductById(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+    try {
+      const { productId } = request.params as { productId: string };
+      const response = await httpClient.forward(`${this.baseUrl}/products/${productId}`, {
+        method: 'GET',
+        headers: request.headers as Record<string, string>,
+      });
+
+      const statusCode = (response.data as any)?.success ? 200 : response.status;
+      reply.status(statusCode).send(response.data);
+    } catch (error) {
+      proxyLogger.error({ error }, 'Get product by ID proxy failed');
+      reply.status(503).send({ success: false, resp_msg: 'Authentication service unavailable', resp_code: 5003 });
+    }
+  }
 }
 
 export const productProxy = new ProductProxy();
