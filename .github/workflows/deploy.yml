@@ -45,7 +45,7 @@ jobs:
           images: |
             ghcr.io/${{ secrets.GHCR_OWNER }}/api-gateway
           tags: |
-            type=raw,value=latest
+            type=raw,value=qa
             type=sha
 
       - name: Build and push Docker image
