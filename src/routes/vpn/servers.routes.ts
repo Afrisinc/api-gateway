@@ -11,7 +11,7 @@ export const registerServerRoutes = async (app: FastifyInstance): Promise<void> 
     '/admin/servers',
     {
       schema: {
-        tags: ['Servers'],
+        tags: ['VPN - Servers'],
         summary: 'Get All VPN Servers',
         description: 'Retrieve a comprehensive list of all available VPN servers with their configurations and status.',
         response: {
@@ -33,7 +33,7 @@ export const registerServerRoutes = async (app: FastifyInstance): Promise<void> 
     '/admin/servers/healthy',
     {
       schema: {
-        tags: ['Servers'],
+        tags: ['VPN - Servers'],
         summary: 'Get Healthy Servers',
         description: 'Retrieve a filtered list of healthy and active servers available for client connections.',
         response: {
@@ -55,7 +55,7 @@ export const registerServerRoutes = async (app: FastifyInstance): Promise<void> 
     '/admin/servers',
     {
       schema: {
-        tags: ['Servers'],
+        tags: ['VPN - Servers'],
         summary: 'Create Server',
         description: 'Create a new VPN server with WireGuard configuration and agent details.',
         body: ServerSchemas.createServerRequest,
@@ -79,7 +79,7 @@ export const registerServerRoutes = async (app: FastifyInstance): Promise<void> 
     '/admin/servers/:serverId/status',
     {
       schema: {
-        tags: ['Servers'],
+        tags: ['VPN - Servers'],
         summary: 'Update Server Status',
         description: 'Update the operational and health status of a VPN server.',
         params: {

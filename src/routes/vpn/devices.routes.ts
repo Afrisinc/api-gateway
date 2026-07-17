@@ -11,7 +11,7 @@ export const registerDeviceRoutes = async (app: FastifyInstance): Promise<void> 
     '/users/:userId/devices',
     {
       schema: {
-        tags: ['Devices'],
+        tags: ['VPN - Devices'],
         summary: 'Register Device',
         description: 'Register a new device for a VPN user with device name and type.',
         params: {
@@ -44,7 +44,7 @@ export const registerDeviceRoutes = async (app: FastifyInstance): Promise<void> 
     '/users/:userId/devices',
     {
       schema: {
-        tags: ['Devices'],
+        tags: ['VPN - Devices'],
         summary: 'List User Devices',
         description: 'Retrieve a list of all devices registered for a specific user.',
         params: {
@@ -75,7 +75,7 @@ export const registerDeviceRoutes = async (app: FastifyInstance): Promise<void> 
     '/users/:userId/devices/:deviceId',
     {
       schema: {
-        tags: ['Devices'],
+        tags: ['VPN - Devices'],
         summary: 'Get Device',
         description: 'Retrieve details of a specific device.',
         params: {
@@ -107,7 +107,7 @@ export const registerDeviceRoutes = async (app: FastifyInstance): Promise<void> 
     '/users/:userId/devices/:deviceId',
     {
       schema: {
-        tags: ['Devices'],
+        tags: ['VPN - Devices'],
         summary: 'Delete Device',
         description: 'Delete a device and remove it from the VPN network.',
         params: {
@@ -139,7 +139,7 @@ export const registerDeviceRoutes = async (app: FastifyInstance): Promise<void> 
     '/users/:userId/devices/:deviceId/config',
     {
       schema: {
-        tags: ['Devices'],
+        tags: ['VPN - Devices'],
         summary: 'Get Device Config',
         description: 'Download WireGuard configuration file for a device.',
         params: {
@@ -178,7 +178,7 @@ export const registerDeviceRoutes = async (app: FastifyInstance): Promise<void> 
     '/users/:userId/devices/:deviceId/usage',
     {
       schema: {
-        tags: ['Devices'],
+        tags: ['VPN - Devices'],
         summary: 'Get Device Usage',
         description: 'Retrieve data usage statistics for a specific device.',
         params: {

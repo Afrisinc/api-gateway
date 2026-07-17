@@ -11,7 +11,7 @@ export const registerVpnRoutes = async (app: FastifyInstance): Promise<void> => 
     '/users',
     {
       schema: {
-        tags: ['VPN Users'],
+        tags: ['VPN - Users'],
         summary: 'List All Users',
         description: 'Retrieve a list of all VPN users with their connection status and details.',
         response: {
@@ -33,7 +33,7 @@ export const registerVpnRoutes = async (app: FastifyInstance): Promise<void> => 
     '/users/by-public-key',
     {
       schema: {
-        tags: ['VPN Users'],
+        tags: ['VPN - Users'],
         summary: 'Get User by Public Key',
         description: 'Retrieve VPN user information by their public key.',
         querystring: VpnSchemas.getUserByPublicKeyRequest,
@@ -57,7 +57,7 @@ export const registerVpnRoutes = async (app: FastifyInstance): Promise<void> => 
     '/users/register',
     {
       schema: {
-        tags: ['VPN Users'],
+        tags: ['VPN - Users'],
         summary: 'Register VPN User',
         description: 'Register a new VPN user with email and IP address.',
         body: VpnSchemas.registerUserRequest,
@@ -81,7 +81,7 @@ export const registerVpnRoutes = async (app: FastifyInstance): Promise<void> => 
     '/users/toggle',
     {
       schema: {
-        tags: ['VPN Users'],
+        tags: ['VPN - Users'],
         summary: 'Toggle User Connection',
         description: 'Toggle VPN connection status for a user (connect or disconnect).',
         body: VpnSchemas.toggleConnectionRequest,

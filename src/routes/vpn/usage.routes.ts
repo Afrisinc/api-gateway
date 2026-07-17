@@ -11,7 +11,7 @@ export const registerUsageRoutes = async (app: FastifyInstance): Promise<void> =
     '/users/:userId/usage',
     {
       schema: {
-        tags: ['Usage'],
+        tags: ['VPN - Usage'],
         summary: 'Get User Total Usage',
         description: 'Retrieve aggregated data usage statistics for a user across all connected devices.',
         params: {
