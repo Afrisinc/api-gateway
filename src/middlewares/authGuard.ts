@@ -14,6 +14,9 @@ declare module 'fastify' {
     user?: {
       userId: string;
       email: string;
+      role?: string;
+      accountId?: string;
+      product?: string;
     };
   }
 }

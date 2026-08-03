@@ -1,149 +1,34 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
 import { env } from '@/config/env';
-import { httpClient } from '@/utils/http-client';
-import { proxyLogger } from '@/utils/logger';
+import { apiAdapter } from '@/utils/apiAdapter';
 
-export class AuthProxy {
-  private readonly baseUrl = env.AUTH_SERVICE_URL;
-
-  async register(request: FastifyRequest, reply: FastifyReply): Promise<void> {
-    console.log('AuthProxy.register called with body:', request.body);
-    try {
-      const response = await httpClient.forward(`${this.baseUrl}/auth/register`, {
-        method: 'POST',
-        headers: request.headers as Record<string, string>,
-        data: request.body,
-      });
-
-      const statusCode = (response.data as any)?.success ? 201 : response.status;
-      reply.status(statusCode).send(response.data);
-    } catch (error) {
-      proxyLogger.error({ error }, 'Auth register proxy failed');
-      reply.status(503).send({ success: false, resp_msg: 'Authentication service unavailable', resp_code: 5003 });
-    }
-  }
-
-  async login(request: FastifyRequest, reply: FastifyReply): Promise<void> {
-    try {
-      const response = await httpClient.forward(`${this.baseUrl}/auth/login`, {
-        method: 'POST',
-        headers: request.headers as Record<string, string>,
-        data: request.body,
-      });
-
-      const statusCode = (response.data as any)?.success ? 200 : response.status;
-      reply.status(statusCode).send(response.data);
-    } catch (error) {
-      proxyLogger.error({ error }, 'Auth login proxy failed');
-      reply.status(503).send({ success: false, resp_msg: 'Authentication service unavailable', resp_code: 5003 });
-    }
-  }
-
-  async verifyToken(token: string): Promise<{ valid: boolean; userId?: string; email?: string }> {
-    try {
-      const response = await httpClient.forward(`${this.baseUrl}/auth/verify`, {
-        method: 'POST',
-        headers: {
-          authorization: `Bearer ${token}`,
-          'content-type': 'application/json',
-        },
-        data: {},
-      });
-
-      if (response.status === 200) {
-        const data = response.data as any;
-        return {
-          valid: true,
-          userId: data?.data?.userId || data?.userId,
-          email: data?.data?.email || data?.email,
-        };
-      }
-
-      return { valid: false };
-    } catch (error) {
-      proxyLogger.error({ error }, 'Token verification failed');
-      return { valid: false };
-    }
-  }
-
-  async forgotPassword(request: FastifyRequest, reply: FastifyReply): Promise<void> {
-    try {
-      const response = await httpClient.forward(`${this.baseUrl}/auth/forgot-password`, {
-        method: 'POST',
-        headers: request.headers as Record<string, string>,
-        data: request.body,
-      });
-
-      const statusCode = (response.data as any)?.success ? 200 : response.status;
-      reply.status(statusCode).send(response.data);
-    } catch (error) {
-      proxyLogger.error({ error }, 'Forgot password proxy failed');
-      reply.status(503).send({ success: false, resp_msg: 'Authentication service unavailable', resp_code: 5003 });
-    }
-  }
-
-  async resetPassword(request: FastifyRequest, reply: FastifyReply): Promise<void> {
-    try {
-      const response = await httpClient.forward(`${this.baseUrl}/auth/reset-password`, {
-        method: 'POST',
-        headers: request.headers as Record<string, string>,
-        data: request.body,
-      });
-
-      const statusCode = (response.data as any)?.success ? 200 : response.status;
-      reply.status(statusCode).send(response.data);
-    } catch (error) {
-      proxyLogger.error({ error }, 'Reset password proxy failed');
-      reply.status(503).send({ success: false, resp_msg: 'Authentication service unavailable', resp_code: 5003 });
-    }
-  }
-
-  async verify(request: FastifyRequest, reply: FastifyReply): Promise<void> {
-    try {
-      const response = await httpClient.forward(`${this.baseUrl}/auth/verify`, {
-        method: 'POST',
-        headers: request.headers as Record<string, string>,
-        data: {},
-      });
-
-      const statusCode = (response.data as any)?.success ? 200 : response.status;
-      reply.status(statusCode).send(response.data);
-    } catch (error) {
-      proxyLogger.error({ error }, 'Token verification proxy failed');
-      reply.status(503).send({ success: false, resp_msg: 'Authentication service unavailable', resp_code: 5003 });
-    }
-  }
-
-  async verifyEmail(request: FastifyRequest, reply: FastifyReply): Promise<void> {
-    try {
-      const { token } = request.query as { token: string };
-      const response = await httpClient.forward(`${this.baseUrl}/auth/verify-email?token=${token}`, {
-        method: 'GET',
-        headers: request.headers as Record<string, string>,
-      });
-
-      const statusCode = (response.data as any)?.success ? 200 : response.status;
-      reply.status(statusCode).send(response.data);
-    } catch (error) {
-      proxyLogger.error({ error }, 'Email verification proxy failed');
-      reply.status(503).send({ success: false, message: 'Authentication service unavailable' });
-    }
-  }
-  async exchangeCodeForToken(request: FastifyRequest, reply: FastifyReply): Promise<void> {
-    try {
-      const response = await httpClient.forward(`${this.baseUrl}/oauth/exchange`, {
-        method: 'POST',
-        headers: request.headers as Record<string, string>,
-        data: request.body,
-      });
-
-      const statusCode = (response.data as any)?.success ? 200 : response.status;
-      reply.status(statusCode).send(response.data);
-    } catch (error) {
-      proxyLogger.error({ error }, 'Email verification proxy failed');
-      reply.status(503).send({ success: false, message: 'Authentication service unavailable' });
-    }
-  }
+interface VerificationResult {
+  valid: boolean;
+  userId?: string;
+  email?: string;
+  role?: string;
+  accountId?: string;
+  product?: string;
+  tokenType?: string;
 }
 
-export const authProxy = new AuthProxy();
+export const authProxy = {
+  async verifyToken(token: string): Promise<VerificationResult> {
+    try {
+      const api = apiAdapter(env.AUTH_URL, {});
+      const response = await api.post('/auth/verify', { token });
+      const data = response.data.data;
+
+      return {
+        valid: response.data.success !== false,
+        userId: data?.user_id || data?.userId,
+        email: data?.email,
+        role: data?.role,
+        accountId: data?.account_id,
+        product: data?.product,
+        tokenType: data?.token_type,
+      };
+    } catch {
+      return { valid: false };
+    }
+  },
+};

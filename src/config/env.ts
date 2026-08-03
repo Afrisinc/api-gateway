@@ -7,11 +7,11 @@ export const env = {
 
   API_BASE_URL: process.env.API_BASE_URL || `http://localhost:${process.env.PORT || 3000}`,
   // Microservice URLs
-  AUTH_SERVICE_URL: process.env.AUTH_SERVICE_URL || 'http://localhost:3001',
-  CONTENT_SERVICE_URL: process.env.CONTENT_SERVICE_URL || 'http://localhost:3002',
-  MEDIA_SERVICE_URL: process.env.MEDIA_SERVICE_URL || 'http://localhost:3003',
-  VPN_SERVICE_URL: process.env.VPN_SERVICE_URL || 'http://localhost:8080',
-  NOTIFICATION_SERVICE_URL: process.env.NOTIFICATION_SERVICE_URL || 'http://localhost:3004',
+  AUTH_URL: process.env.AUTH_URL || 'http://localhost:3001',
+  MEDIA_URL: process.env.MEDIA_URL || 'http://localhost:3003',
+  NOTIFY_URL: process.env.NOTIFY_URL || 'http://localhost:3004',
+  PAY_URL: process.env.PAY_URL || 'http://localhost:3005',
+  VPN_URL: process.env.VPN_URL || 'http://localhost:8080',
   // Service timeouts (in milliseconds)
   SERVICE_TIMEOUT: Number.parseInt(process.env.SERVICE_TIMEOUT || '60000', 10),
 
