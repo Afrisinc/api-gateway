@@ -23,7 +23,7 @@ const errorHandlerPlugin: FastifyPluginAsync = fp(async fastify => {
     }
 
     if (statusCode === 500) {
-      logger.error('500 Error:', error);
+      logger.error({ error }, '500 Error');
     }
 
     return ResponseHandler.error(reply, 1001, message, statusCode);
