@@ -8,7 +8,7 @@ export const server = fastify({ logger: false });
 const start = async () => {
   await server.register(app);
   await server.ready();
-  await server.listen({ port: env.PORT });
+  await server.listen({ port: env.PORT, host: '0.0.0.0' });
   logger.info(`Gateway Is Running on ${env.PORT}`);
 };
 
