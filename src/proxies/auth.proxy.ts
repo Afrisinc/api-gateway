@@ -1,5 +1,6 @@
 import { env } from '@/config/env';
 import { apiAdapter } from '@/utils/apiAdapter';
+import { serviceAuth } from '@/utils/serviceAuth';
 
 interface VerificationResult {
   valid: boolean;
@@ -14,8 +15,18 @@ interface VerificationResult {
 export const authProxy = {
   async verifyToken(token: string): Promise<VerificationResult> {
     try {
-      const api = apiAdapter(env.AUTH_URL, {});
-      const response = await api.post('/auth/verify', { token });
+      // Add gateway signature headers for service-to-service verification
+      const signatureHeaders = serviceAuth.getServiceHeaders('POST', '/verify', {});
+
+      console.log(`Expected Signature: ${signatureHeaders} \n`);
+      console.log(`Received Signature: ${signatureHeaders} \n`);
+      console.log(`Data Used for Signature: ${signatureHeaders}. \n`);
+
+      const api = apiAdapter(env.AUTH_URL, {
+        authorization: `Bearer ${token}`,
+        ...signatureHeaders,
+      });
+      const response = await api.post('/verify', {});
       const data = response.data.data;
 
       return {

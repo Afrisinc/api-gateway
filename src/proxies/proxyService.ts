@@ -4,6 +4,7 @@ import { logger } from '../utils/logger';
 import { ResponseHandler } from '@/utils/response';
 import { ALLOWED_ENV_KEYS } from '@/utils/allowedEnv';
 import { FileHandler } from '@/utils/fileHandler';
+import { serviceAuth } from '@/utils/serviceAuth';
 
 export const createProxyHandler = (urlEnvKey: string, prefix: string) => {
   return async (request: FastifyRequest, reply: FastifyReply) => {
@@ -27,7 +28,22 @@ export const createProxyHandler = (urlEnvKey: string, prefix: string) => {
         return reply.status(uploadResponse.status).send(uploadResponse.data);
       }
 
-      const api = apiAdapter(baseUrl, request.headers);
+      const {
+        host: _host,
+        connection: _connection,
+        'content-length': _contentLength,
+        'transfer-encoding': _transferEncoding,
+        ...forwardableHeaders
+      } = request.headers;
+
+      const signaturePath = relativePath.split('?')[0];
+      const signatureHeaders = serviceAuth.getServiceHeaders(request.method, signaturePath, request.body);
+      const headersWithSignature = {
+        ...forwardableHeaders,
+        ...signatureHeaders,
+      };
+
+      const api = apiAdapter(baseUrl, headersWithSignature);
       const method = request.method.toLowerCase() as 'get' | 'post' | 'put' | 'delete' | 'patch';
 
       let response;

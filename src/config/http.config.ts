@@ -7,5 +7,5 @@ export const PUBLIC_ENDPOINTS = [
   '/auth/forgot-password',
   '/auth/verify-email',
   '/auth/reset-password',
-  '/oauth/exchange',
+  '/auth/oauth/exchange',
 ];

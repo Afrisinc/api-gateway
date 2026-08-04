@@ -4,6 +4,7 @@ export const env = {
   NODE_ENV: (process.env.NODE_ENV || 'development') as 'development' | 'production' | 'test',
   PORT: Number.parseInt(process.env.PORT || '3000', 10),
   JWT_SECRET: process.env.JWT_SECRET || 'fallback-secret-key-change-in-production',
+  SERVICE_SECRET: process.env.SERVICE_SECRET || 'gateway-service-secret-change-in-production',
 
   API_BASE_URL: process.env.API_BASE_URL || `http://localhost:${process.env.PORT || 3000}`,
   // Microservice URLs

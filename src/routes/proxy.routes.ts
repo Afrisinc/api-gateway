@@ -25,9 +25,9 @@ export async function authRoutes(fastify: FastifyInstance) {
   };
   const publicConfig = { preHandler: [fastify.rateLimit] };
 
-  HTTP_METHODS.forEach(method => {
-    // Public endpoints (strip /auth prefix)
-    PUBLIC_ENDPOINTS.forEach(endpoint => {
+  // Register all specific public endpoints first
+  PUBLIC_ENDPOINTS.forEach(endpoint => {
+    HTTP_METHODS.forEach(method => {
       fastify.route({
         method,
         url: endpoint,
@@ -35,8 +35,10 @@ export async function authRoutes(fastify: FastifyInstance) {
         ...publicConfig,
       });
     });
+  });
 
-    // Protected endpoints (catch-all, strip /auth prefix)
+  // Register catch-all protected routes last (less specific, lower priority)
+  HTTP_METHODS.forEach(method => {
     fastify.route({
       method,
       url: '/auth/*',
