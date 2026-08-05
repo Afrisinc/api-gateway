@@ -23,8 +23,11 @@ export const createProxyHandler = (urlEnvKey: string, prefix: string) => {
       const relativePath = request.url.startsWith(prefix) ? request.url.substring(prefix.length) || '/' : request.url;
       logger.info(`Proxying ${request.method} request`);
 
+      const signaturePath = relativePath.split('?')[0];
+      const signatureHeaders = serviceAuth.getServiceHeaders(request.method, signaturePath, request.body);
+
       if (request.isMultipart()) {
-        const uploadResponse = await FileHandler.forwardUpload(request, baseUrl, relativePath);
+        const uploadResponse = await FileHandler.forwardUpload(request, baseUrl, relativePath, signatureHeaders);
         return reply.status(uploadResponse.status).send(uploadResponse.data);
       }
 
@@ -35,9 +38,6 @@ export const createProxyHandler = (urlEnvKey: string, prefix: string) => {
         'transfer-encoding': _transferEncoding,
         ...forwardableHeaders
       } = request.headers;
-
-      const signaturePath = relativePath.split('?')[0];
-      const signatureHeaders = serviceAuth.getServiceHeaders(request.method, signaturePath, request.body);
       const headersWithSignature = {
         ...forwardableHeaders,
         ...signatureHeaders,

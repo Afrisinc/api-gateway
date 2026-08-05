@@ -2,7 +2,12 @@ import axios from 'axios';
 import logger from './logger';
 
 export class FileHandler {
-  static async forwardUpload(req: any, baseUrl: string, relativePath: string) {
+  static async forwardUpload(
+    req: any,
+    baseUrl: string,
+    relativePath: string,
+    extraHeaders: Record<string, string> = {}
+  ) {
     try {
       const targetUrl = `${baseUrl}${relativePath}`;
       const contentType = req.headers['content-type'];
@@ -11,6 +16,7 @@ export class FileHandler {
         headers: {
           'content-type': contentType,
           Authorization: req.headers.authorization,
+          ...extraHeaders,
         },
         maxContentLength: Infinity,
         maxBodyLength: Infinity,
