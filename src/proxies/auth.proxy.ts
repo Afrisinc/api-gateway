@@ -18,10 +18,6 @@ export const authProxy = {
       // Add gateway signature headers for service-to-service verification
       const signatureHeaders = serviceAuth.getServiceHeaders('POST', '/verify', {});
 
-      console.log(`Expected Signature: ${signatureHeaders} \n`);
-      console.log(`Received Signature: ${signatureHeaders} \n`);
-      console.log(`Data Used for Signature: ${signatureHeaders}. \n`);
-
       const api = apiAdapter(env.AUTH_URL, {
         authorization: `Bearer ${token}`,
         ...signatureHeaders,

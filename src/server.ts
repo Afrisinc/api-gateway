@@ -3,7 +3,10 @@ import { app } from './app';
 import { env } from './config/env';
 import logger from './utils/logger';
 
-export const server = fastify({ logger: false });
+export const server = fastify({
+  logger: false,
+  bodyLimit: 536870912, // 512MB for video files and bulk uploads
+});
 
 const start = async () => {
   await server.register(app);
