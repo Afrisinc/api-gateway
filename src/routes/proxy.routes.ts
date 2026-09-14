@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { createProxyHandler } from '@/proxies/proxyService';
-import { HTTP_METHODS, PUBLIC_ENDPOINTS } from '@/config/http.config';
+import { HTTP_METHODS, PUBLIC_ENDPOINTS, PUBLIC_MEDIA_ENDPOINTS } from '@/config/http.config';
 
 const registerProxyRoute = (fastify: FastifyInstance, envKey: string, prefix: string) => {
   const handler = createProxyHandler(envKey, prefix);
@@ -49,7 +49,33 @@ export async function authRoutes(fastify: FastifyInstance) {
 }
 
 export async function mediaRoutes(fastify: FastifyInstance) {
-  registerProxyRoute(fastify, 'MEDIA_URL', '/media');
+  const handler = createProxyHandler('MEDIA_URL', '/media');
+  const protectedConfig = {
+    preHandler: [fastify.rateLimit, fastify.authenticate, fastify.authorize],
+  };
+  const publicConfig = { preHandler: [fastify.rateLimit] };
+
+  // Public reading surface — registered the same way auth's PUBLIC_ENDPOINTS
+  // exposes login/register: anonymous, and ahead of the protected catch-all.
+  PUBLIC_MEDIA_ENDPOINTS.forEach(({ method, url }) => {
+    fastify.route({
+      method,
+      url,
+      handler,
+      ...publicConfig,
+    });
+  });
+
+  // Everything else under /media (drafting, publishing, dashboard-only
+  // endpoints) stays behind auth.
+  HTTP_METHODS.forEach(method => {
+    fastify.route({
+      method,
+      url: '/media/*',
+      handler,
+      ...protectedConfig,
+    });
+  });
 }
 
 export async function notifyRoutes(fastify: FastifyInstance) {

@@ -8,10 +8,6 @@ interface RoutePermission {
   allowedRoles: string[];
 }
 
-// Platform-staff roles (see platform-frontend's `ControlRole` / `PLATFORM_WIDE_ROLES`)
-// that can reach the Notify admin console. This is a staff console, so it
-// uses the staff role vocabulary, not per-account roles like the VPN
-// dashboard's account-owner "OWNER" below.
 const NOTIFY_PLATFORM_ADMIN_ROLES = ['SUPER_ADMIN', 'OPS_MANAGER'];
 
 const RESTRICTED_ROUTES: RoutePermission[] = [
@@ -21,8 +17,6 @@ const RESTRICTED_ROUTES: RoutePermission[] = [
   { method: 'PUT', pathPattern: '/vpn/admin/servers.*', allowedRoles: ['ADMIN', 'OWNER'] },
   { method: 'DELETE', pathPattern: '/vpn/admin/servers.*', allowedRoles: ['ADMIN', 'OWNER'] },
 
-  // Notify admin console - platform-wide client/dashboard/analytics views,
-  // restricted to platform admins (mirrored on notify-service itself).
   { method: 'GET', pathPattern: '/notify/api/v1/clients.*', allowedRoles: NOTIFY_PLATFORM_ADMIN_ROLES },
   { method: 'GET', pathPattern: '/notify/api/v1/dashboard.*', allowedRoles: NOTIFY_PLATFORM_ADMIN_ROLES },
   { method: 'GET', pathPattern: '/notify/admin/internal/platform/.*', allowedRoles: NOTIFY_PLATFORM_ADMIN_ROLES },
